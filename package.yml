@@ -1,0 +1,18 @@
+package: community.lazycat.app.privatebin
+version: 2.1.0
+name: PrivateBin
+description: "Minimalist pastebin that encrypts and decrypts data in the browser."
+min_os_version: "1.6.0"
+homepage: https://github.com/PrivateBin/PrivateBin
+author: PrivateBin
+license: Zlib
+permissions:
+  required:
+    - net.internet
+locales:
+  zh:
+    name: PrivateBin
+    description: "极简阅后即焚粘贴板：内容在浏览器端加密，服务器只存密文。"
+  en:
+    name: PrivateBin
+    description: "Minimalist pastebin that encrypts and decrypts data in the browser."

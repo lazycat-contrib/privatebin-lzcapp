@@ -1,0 +1,34 @@
+application:
+  subdomain: privatebin
+  multi_instance: false
+  upstreams:
+    - location: /package-licenses/
+      backend: file:///lzcapp/pkg/content/licenses/
+    - location: /
+      backend: http://privatebin:8080/
+
+services:
+  privatebin:
+    # upstream: privatebin/nginx-fpm-alpine:2.1.0
+    image: docker.1ms.run/privatebin/nginx-fpm-alpine:2.1.0
+    command: sh /lzcapp/pkg/content/start.sh
+    binds:
+      - /lzcapp/var/data:/srv/data
+
+usage: |
+  PrivateBin 是极简阅后即焚粘贴板：粘贴内容在浏览器里加密后才上传，服务器只保存密文，读取时在浏览器里解密。
+
+  使用方法：
+  1. 打开应用，直接把要分享的文本或代码粘进去，可选过期时间（默认 1 天）和是否阅后即焚。
+  2. 点「发送」后得到一条带解密密钥的链接（密钥在 # 号之后，不会被发送到服务器）。
+  3. 把链接发给对方，对方打开即可阅读；到期或阅后即焚后内容自动消失。
+
+  数据与安全：
+  - 所有粘贴内容都以密文形式保存在 /lzcapp/var/data，卸载应用会一并删除。
+  - 本应用没有账号体系，这是它的设计：谁能拿到链接谁就能看，因此请只把链接发给信任的人，并合理设置过期时间。
+  - 服务端不持有解密密钥，管理员也无法直接读出内容。
+  - 应用经懒猫入口鉴权访问，未额外开放无需登录的接口路径。
+
+  说明：
+  - 内容大小上限 10 MB，创建频率做了限流（每 5 秒 1 次），避免被当作公开粘贴站滥用。
+  - 未做真机验证：创建粘贴、过期清理、阅后即焚、加密解密流程以及重启后持久化均未在设备上实测。
